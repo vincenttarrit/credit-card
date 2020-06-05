@@ -15,6 +15,8 @@ class CreditCardWidget extends StatefulWidget {
     this.width,
     this.textStyle,
     this.cardBgColor = const Color(0xff1b447b),
+    @required this.urlImageFront,
+    @required this.urlImageBack,
   })  : assert(cardNumber != null),
         assert(showBackView != null),
         super(key: key);
@@ -29,6 +31,8 @@ class CreditCardWidget extends StatefulWidget {
   final Duration animationDuration;
   final double height;
   final double width;
+  final String urlImageFront;
+  final String urlImageBack;
 
   @override
   _CreditCardWidgetState createState() => _CreditCardWidgetState();
@@ -124,11 +128,13 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       children: <Widget>[
         AnimationCard(
           animation: _frontRotation,
-          child: buildFrontContainer(width, height, context, orientation),
+          child: buildFrontContainer(
+              width, height, context, orientation, widget.urlImageFront),
         ),
         AnimationCard(
           animation: _backRotation,
-          child: buildBackContainer(width, height, context, orientation),
+          child: buildBackContainer(
+              width, height, context, orientation, widget.urlImageBack),
         ),
       ],
     );
@@ -137,12 +143,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   ///
   /// Builds a back container containing cvv
   ///
-  Container buildBackContainer(
-    double width,
-    double height,
-    BuildContext context,
-    Orientation orientation,
-  ) {
+  Container buildBackContainer(double width, double height,
+      BuildContext context, Orientation orientation, String urlImageBack) {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.title.merge(
           TextStyle(
             color: Colors.black,
@@ -170,7 +172,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           (orientation == Orientation.portrait ? height / 4 : height / 2),
       child: Stack(
         children: <Widget>[
-          getRandomBackground(widget.height, widget.width ?? width),
+          getRandomBackground(
+              widget.height, widget.width ?? width, urlImageBack),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
@@ -258,12 +261,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   /// Builds a front container containing
   /// Card number, Exp. year and Card holder name
   ///
-  Container buildFrontContainer(
-    double width,
-    double height,
-    BuildContext context,
-    Orientation orientation,
-  ) {
+  Container buildFrontContainer(double width, double height,
+      BuildContext context, Orientation orientation, String urlImageFront) {
     final TextStyle defaultTextStyle = Theme.of(context).textTheme.title.merge(
           TextStyle(
             color: Colors.white,
@@ -280,7 +279,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           (orientation == Orientation.portrait ? height / 4 : height / 2),
       child: Stack(
         children: <Widget>[
-          getRandomBackground(widget.height, widget.width),
+          getRandomBackground(widget.height, widget.width, urlImageFront),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
@@ -671,9 +670,7 @@ enum CardType {
   discover,
 }
 
-String randomPic = 'https://placeimg.com/680/400/nature';
-
-Container getRandomBackground(double height, double width) {
+Container getRandomBackground(double height, double width, String url) {
   return Container(
     child: Flex(
       direction: Axis.horizontal,
@@ -683,7 +680,7 @@ Container getRandomBackground(double height, double width) {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16.0),
             child: Image.network(
-              randomPic,
+              url,
               width: width,
               height: height,
               fit: BoxFit.cover,
