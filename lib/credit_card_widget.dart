@@ -3,21 +3,23 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class CreditCardWidget extends StatefulWidget {
-  const CreditCardWidget({
-    Key key,
-    @required this.cardNumber,
-    @required this.expiryDate,
-    @required this.cardHolderName,
-    @required this.cvvCode,
-    @required this.showBackView,
-    this.animationDuration = const Duration(milliseconds: 500),
-    this.height,
-    this.width,
-    this.textStyle,
-    this.cardBgColor = const Color(0xff1b447b),
-    @required this.urlImageFront,
-    @required this.urlImageBack,
-  })  : assert(cardNumber != null),
+  const CreditCardWidget(
+      {Key key,
+      @required this.cardNumber,
+      @required this.expiryDate,
+      @required this.cardHolderName,
+      @required this.cvvCode,
+      @required this.showBackView,
+      this.animationDuration = const Duration(milliseconds: 500),
+      this.height,
+      this.width,
+      this.textStyle,
+      this.cardBgColor = const Color(0xff1b447b),
+      @required this.urlImageFront,
+      @required this.urlImageBack,
+      this.hintTextExpiryDate,
+      this.placeHolderCardHolder = ''})
+      : assert(cardNumber != null),
         assert(showBackView != null),
         super(key: key);
 
@@ -33,6 +35,8 @@ class CreditCardWidget extends StatefulWidget {
   final double width;
   final String urlImageFront;
   final String urlImageBack;
+  final String placeHolderCardHolder;
+  final String hintTextExpiryDate;
 
   @override
   _CreditCardWidgetState createState() => _CreditCardWidgetState();
@@ -321,7 +325,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                     child: Row(
                       children: <Widget>[
                         Text(
-                          'Expiry',
+                          widget.hintTextExpiryDate,
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'halter',
@@ -349,7 +353,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                     child: Text(
                       widget.cardHolderName.isEmpty ||
                               widget.cardHolderName == null
-                          ? 'CARD HOLDER'
+                          ? widget.placeHolderCardHolder
                           : widget.cardHolderName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
